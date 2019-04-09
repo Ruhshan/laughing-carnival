@@ -1,0 +1,5 @@
+[client]
+database = ADOR_PRODUCTS
+user = root
+password = madmin123
+default-character-set = utf8

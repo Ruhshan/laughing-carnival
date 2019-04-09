@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>STOCK</title>
+
+	<link rel="stylesheet" href="{% static 'css/kendo.common.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.common-material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.mobile.all.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.mobile.min.css' %}" />
+
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/kendo.all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/validator.min.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+</head>
+<body>
+	<div class="container" ng-app="stockApp" ng-controller="stockController">
+		<ul id="menu">
+            {% verbatim %}
+            <li><a href="{{ menuUrl }}">STOCK</a></li>
+            <li><a href="{{ menuUrl }}Sales.html">SALES</a></li>
+            <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
+            <li><a href="{{ menuUrl }}Outlet.html">OUTLET</a></li>
+            <li><a href="{{ menuUrl }}Product.html">PRODUCT</a></li>
+            <li><a href="{{ menuUrl }}Invoice.html">INVOICE</a></li>
+            <li><a href="{{ menuUrl }}InvoiceHistory.html">INVOICE RECORDS</a></li>
+            {% endverbatim %}
+        </ul>
+
+		<center><h2>STOCK</h2></center>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<input id="outletList" style="width: 300px; margin-left: 10px;" />
+				<div id="stockByOutlet" style="max-height: 500px; overflow-y: auto;"></div>
+				<h4 style="margin-top: 10px; margin-right: 50px; float: right;">TOTAL: {{sumByOutlet}}</h4>
+			</div>
+
+			<div class="col-sm-6">
+				<input id="productList" style="width: 300px; margin-left: 10px;" />
+				<div id="stockByProduct" style="max-height: 500px; overflow-y: auto;"></div>
+				<h4 style="margin-top: 10px; margin-right: 50px; float: right;">TOTAL: {{sumByProduct}}</h4>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var app = angular.module("stockApp", []);
+		app.controller("stockController", function($scope, $http) {
+			$scope.pNumber = "";
+			$scope.outletId = "";
+			$scope.sumByProduct = 0;
+			$scope.sumByOutlet = 0;
+
+			$scope.menuUrl = view_url;
+			$('#menu').kendoMenu();
+
+            $("#outletList").kendoDropDownList({
+            	dataTextField: "outlet_NAME",
+                dataValueField: "outlet_ID",
+                dataSource: {
+                	transport: {
+						read: {
+							url: "/api/outlet/",
+							dataType: "json"
+						}
+					},
+					sort: {
+						field: "outlet_NAME",
+            			dir: "asc"
+					}
+                },
+                dataBound: function dataBound() {
+                	$scope.outletId = $("#outletList").val();
+                	$('#stockByOutlet').data('kendoGrid').dataSource.read();
+                },
+                change: function onChange() {
+                	$scope.outletId = $("#outletList").val();
+                	$('#stockByOutlet').data('kendoGrid').dataSource.read();
+                },
+                index: 0
+            });
+
+            $("#productList").kendoDropDownList({
+            	dataTextField: "product_NAME",
+                dataValueField: "product_NUMBER",
+                dataSource: {
+                	transport: {
+						read: {
+							url: base_url + "product/",
+							dataType: "json"
+						}
+					},
+					sort: {
+						field: "product_NUMBER",
+						dir: "asc"
+					}
+                },
+                dataBound: function dataBound() {
+                	$scope.pNumber = $("#productList").val();
+                	$('#stockByProduct').data('kendoGrid').dataSource.read();
+                },
+                change: function onChange() {
+                	$scope.pNumber = $("#productList").val();
+                	$('#stockByProduct').data('kendoGrid').dataSource.read();
+                },
+                index: 0
+            });
+
+            $("#stockByOutlet").kendoGrid({
+            	selectable: "true",
+				allowCopy: true,
+				columns: [
+					{
+						field: "product.product_NUMBER",
+						title: "ID",
+						width: 1
+					},
+					{
+						field: "product.product_NAME",
+						title: "PRODUCT NAME",
+						width: 2
+					},
+					{
+						field: "product.price",
+						title: "PRICE",
+						width: 1
+					},
+					{
+						field: "quantity",
+						title: "QTY",
+						width: 1
+					}
+				],
+				sortable: {
+					mode: "multiple",
+					allowUnsort: true
+				},
+				filterable: true,
+				dataSource: {
+					transport: {
+						read: {
+							url: function() {
+								if($scope.outletId == "") {
+									return "";
+								}
+								return base_url + "stock/byoutlet/" + $scope.outletId;
+							},
+							dataType: "json"
+						}
+					},
+					sort: {
+						field: "product.product_NUMBER",
+            			dir: "asc"
+					}
+				},
+				dataBound: function() {
+					var data = $('#stockByOutlet').data('kendoGrid').dataSource.data();
+
+                	var sum = 0;
+                	for(var i = 0; i < data.length; i++) {
+                		sum += data[i].quantity;
+                	}
+
+                	$scope.$apply(function() {
+						$scope.sumByOutlet = sum;
+					});
+				}
+            });
+
+            $("#stockByProduct").kendoGrid({
+            	selectable: "true",
+				allowCopy: true,
+				columns: [
+					{
+						field: "outlet.outlet_ID",
+						title: "ID",
+						width: 1
+					},
+					{
+						field: "outlet.outlet_NAME",
+						title: "OUTLET NAME",
+						width: 2
+					},
+					{
+						field: "quantity",
+						title: "QUANTITY",
+						width: 1
+					}
+				],
+				sortable: {
+					mode: "multiple",
+					allowUnsort: true
+				},
+				filterable: true,
+				dataSource: {
+					transport: {
+						read: {
+							url: function() {
+								if($scope.pNumber == "") {
+									return "";
+								}
+								return base_url + "stock/byproduct/" + $scope.pNumber;
+							},
+							dataType: "json"
+						}
+					},
+					sort: {
+						field: "outlet.outlet_NAME",
+            			dir: "asc"
+					}
+				},
+				dataBound: function() {
+					var data = $('#stockByProduct').data('kendoGrid').dataSource.data();
+
+                	var sum = 0;
+                	for(var i = 0; i < data.length; i++) {
+                		sum += data[i].quantity;
+                	}
+
+                	$scope.$apply(function() {
+						$scope.sumByProduct = sum;
+					});
+				}
+            });
+
+		});
+	</script>
+	<style type="text/css">
+		.k-grid-header .k-header
+		{
+			background-color: #0d47a1;
+			border: 0 !important;
+		}
+	</style>
+</body>
+</html>
