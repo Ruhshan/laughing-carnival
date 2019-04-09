@@ -64,8 +64,8 @@
 			$('#menu').kendoMenu();
 
             $("#outletList").kendoDropDownList({
-            	dataTextField: "outlet_NAME",
-                dataValueField: "outlet_ID",
+            	dataTextField: "outlet_name",
+                dataValueField: "outlet_id",
                 dataSource: {
                 	transport: {
 						read: {
@@ -74,7 +74,7 @@
 						}
 					},
 					sort: {
-						field: "outlet_NAME",
+						field: "outlet_name",
             			dir: "asc"
 					}
                 },
@@ -90,17 +90,17 @@
             });
 
             $("#productList").kendoDropDownList({
-            	dataTextField: "product_NAME",
-                dataValueField: "product_NUMBER",
+            	dataTextField: "product_name",
+                dataValueField: "product_number",
                 dataSource: {
                 	transport: {
 						read: {
-							url: base_url + "product/",
+							url: "/api/product/",
 							dataType: "json"
 						}
 					},
 					sort: {
-						field: "product_NUMBER",
+						field: "product_number",
 						dir: "asc"
 					}
                 },
@@ -120,12 +120,12 @@
 				allowCopy: true,
 				columns: [
 					{
-						field: "product.product_NUMBER",
+						field: "product.product_number",
 						title: "ID",
 						width: 1
 					},
 					{
-						field: "product.product_NAME",
+						field: "product.product_name",
 						title: "PRODUCT NAME",
 						width: 2
 					},
@@ -169,6 +169,7 @@
                 	for(var i = 0; i < data.length; i++) {
                 		sum += data[i].quantity;
                 	}
+
 
                 	$scope.$apply(function() {
 						$scope.sumByOutlet = sum;
