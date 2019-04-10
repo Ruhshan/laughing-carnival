@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import PageView
+from .views import PageView, InvoiceView
 from rest_framework import routers
 from .viewsets import OutletViewSet, ProductViewSet, StockViewSet
 
 urlpatterns = [
     path('', PageView.as_view()),
+    path('invoice',InvoiceView.as_view())
 
 ]
 router = routers.SimpleRouter()

@@ -1,4 +1,4 @@
-
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import Outlet, Product, Stock
 
@@ -16,6 +16,7 @@ class ProductSerializer(ModelSerializer):
 
 
 class StockSerializer(ModelSerializer):
+    product_number = ProductSerializer()
     class Meta:
         model = Stock
         fields = '__all__'

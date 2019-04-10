@@ -1,12 +1,12 @@
 var app = angular.module("invoiceApp", []);
 app.controller("invoiceController", function($scope, $http) {
 	$("#outletList").kendoDropDownList({
-		dataTextField: "outlet_NAME",
-		dataValueField: "outlet_ID",
+		dataTextField: "outlet_name",
+		dataValueField: "outlet_id",
 		dataSource: {
 			transport: {
 				read: {
-					url: base_url + 'outlet/',
+					url: '/api/outlet/',
 					dataType: 'json'
 				}
 			}
@@ -63,10 +63,10 @@ app.controller("invoiceController", function($scope, $http) {
 		if(productNameInput.length != 0 && unitPriceInput.length != 0) {
 			$http({
 				method: "GET",
-				url: base_url + 'product/' + productNumberBackUp
+				url: '/api/product/' + productNumberBackUp
 			}).then(
 				function(resp) {
-					productNameInput.val(resp.data.product_NAME);
+					productNameInput.val(resp.data.product_name);
 					unitPriceInput.val(resp.data.price);
 					unitPrice = resp.data.price;
 				},

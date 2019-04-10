@@ -6,4 +6,8 @@ from django.views.generic import TemplateView
 
 
 class PageView(TemplateView):
-    template_name = "index.html"
+    template_name = "app/index.html"
+
+
+class InvoiceView(TemplateView):
+    template_name = "app/Invoice.html"

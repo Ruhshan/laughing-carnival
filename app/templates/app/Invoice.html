@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>CREATE INVOICE</title>
+
+    <link rel="stylesheet" href="{% static 'css/kendo.common.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.common-material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.mobile.all.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.mobile.min.css' %}" />
+
+	<script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/kendo.all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/validator.min.js' %}"></script>
+    <script src="{% static 'js/notify.min.js' %}"></script>
+    <script src="{% static 'js/Invoice/Invoice.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/printThis.js' %}"></script>
+
+    <style>
+        .printInvoiceTable {
+            border: 0.5px solid #000000 !important;
+            -webkit-print-color-adjust: exact !important;
+        }
+        .printInvoiceTable> thead > tr > th,
+        .printInvoiceTable > thead > tr > td,
+        .printInvoiceTable > tbody > tr > td {
+            border: 0.5px solid #000000 !important;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        .printInvoiceTable > thead > tr > th {
+            text-align: center;
+        }
+
+        .borderless > thead > tr > th
+        .borderless > thead > tr > td
+        .borderless > tbody > tr > th
+        .borderless > tbody > tr > td {
+            border: none;
+        }
+    </style>
+</head>
+<body id="body">
+	<div id="mainDiv" class="container" ng-app="invoiceApp" ng-controller="invoiceController">
+        <ul id="menu">
+            {% verbatim %}
+            <li><a href="{{ menuUrl }}">STOCK</a></li>
+            <li><a href="{{ menuUrl }}Sales.html">SALES</a></li>
+            <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
+            <li><a href="{{ menuUrl }}Outlet.html">OUTLET</a></li>
+            <li><a href="{{ menuUrl }}Product.html">PRODUCT</a></li>
+            <li><a href="{{ menuUrl }}Invoice.html">INVOICE</a></li>
+            <li><a href="{{ menuUrl }}InvoiceHistory.html">INVOICE RECORDS</a></li>
+            {% endverbatim %}
+        </ul>
+
+        <div id="invoiceMakerDiv">
+            <h1 style="text-align: center;">CREATE INVOICE</h1>
+    		<div style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="outletList">OUTLET LIST:&nbsp;</label>
+                        <div id="outletList" name="outletList" style="width: 220px;"></div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div style="float: right;">
+                            <label for="invoiceDate">INVOICE DATE:&nbsp;</label>
+                            <input id="invoiceDate" name="invoiceDate" onkeydown="return false;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <td>ARTICLE NO</td>
+                                <td>PRODUCT NAME</td>
+                                <td>UNIT PRICE</td>
+                                <td>QUANTITY</td>
+                                <td>TOTAL PRICE</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+
+                        <tbody id="invoicTableBody">
+                            <tr id="invoiceTableRow" style="text-align: center;">
+                                <td><input type="text" required style="width: 100%; text-align: center;" class="form-control productNumber" name="productNumber"/></td>
+                                <td><input type="text" required onkeydown="return false;" style="width: 100%; text-align: center;" class="form-control" name="productName"/></td>
+                                <td><input type="text" required onkeydown="return false;" style="width: 100%; text-align: center;" class="form-control unitPrice" value="0" name="unitPrice"/></td>
+                                <td><input type="text" required style="width: 100%; text-align: center;" class="form-control quantity" value="0" name="quantity"/></td>
+                                <td><input type="text" required onkeydown="return false;" style="width: 100%; text-align: center;" class="form-control totalPrice" value="0" name="totalPrice"/></td>
+                                <td><button class="btn btn-default btn-sm delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 10px; width: 300px;">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <button id="append" class="btn btn-primary">ADD ANOTEHR ITEM</button>
+                            </td>
+
+                            <td>
+                                <button id="save" class="btn btn-success">CREATE INVOICE</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="madeInvoice">
+            <style>
+                .div_box_shadow {
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                }
+            </style>
+
+            <div style="margin: 35px; margin-left: 0px;">
+                <button class="btn btn-success" id="saveAndPrint">SAVE AND PRINT</button>
+                <button class="btn btn-warning" id="cancelButton">CANCEL</button>
+            </div>
+
+            <div class="div_box_shadow">
+                <div id="invoiceToBePrinted" style="margin-top:20px; margin-bottom: 10px; overflow-y: auto;">
+                    <div class="t" style="margin-bottom: 100px; overflow-y: auto;">
+                        <h2 style="text-align: center;">ADOR PRODUCTS</h2>
+                        <h4 style="text-align: center;">Mohammadpur, Dhaka</h4>
+                        <h4 style="text-align: center;">Mobile: 01716513233</h4>
+
+                        <h3 style="text-align: center; text-decoration: underline; margin-top: 20px;">INVOICE</h3>
+
+                        <div style="margin-top: 80px;"></div>
+
+                        <table class="table borderless">
+                            <tr>
+                                <td style="text-align: left; border-top: none;">
+                                    <label>VENDOR NO:&nbsp;</label>200921
+                                </td>
+                                <td style="text-align: left; border-top: none;"></td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; border-top: none;">
+                                    <label>INVOICE NO:&nbsp;</label>{{ invoiceNo }}
+                                </td>
+                                <td style="text-align: left; border-top: none;"</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; border-top: none;">
+                                    <label>OUTLET:&nbsp;</label>{{ printOutletName }}
+                                </td>
+                                <td style="text-align: right; border-top: none;">
+                                    <label>DATE:&nbsp;</label>{{ printDate }}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered printInvoiceTable" style="margin-top: 10px;">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>ARTICLE</th>
+                                    <th>ARTICEL DESCRIPTION</th>
+                                    <th>QUANTITY</th>
+                                    <th>UNIT PRICE</th>
+                                    <th>AMOUNT</th>
+                                </tr>
+                            </thead>
+                            {% verbatim %}
+                            <tbody>
+                                <tr ng-repeat="product in invoiceProductList">
+                                    <td style="text-align: center;">{{ $index + 1 }}</td>
+                                    <td style="text-align: center;">{{ product.articleNo }}</td>
+                                    <td style="text-align: center;">{{ product.productName }}</td>
+                                    <td style="text-align: center;">{{ product.quantity }}</td>
+                                    <td style="text-align: center;">{{ product.unitPrice }}</td>
+                                    <td style="text-align: center;">{{ product.totalPrice }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: center;">TOTAL</td>
+                                    <td style="text-align: center;">{{ grandTotalQuantity }}</td>
+                                    <td></td>
+                                    <td style="text-align: center;">{{ grandTotalPrice }}</td>
+                                </tr>
+                            </tbody>
+                            {% endverbatim %}
+                        </table>
+
+                        <div style="margin-bottom: 80px;"></div>
+
+                        <table class="table borderless">
+                            <tr>
+                                <td style="text-align: left; border-top: none;"><label>RECEIVERS SIGNATURE</label></td>
+                                <td style="text-align: right; border-top: none;"><label>SUPPLIERS SIGNATURE</label></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	   </div>
+    </div>
+</body>
+</html>

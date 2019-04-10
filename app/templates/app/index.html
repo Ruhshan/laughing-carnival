@@ -41,7 +41,9 @@
 			<div class="col-sm-6">
 				<input id="outletList" style="width: 300px; margin-left: 10px;" />
 				<div id="stockByOutlet" style="max-height: 500px; overflow-y: auto;"></div>
+                {% verbatim %}
 				<h4 style="margin-top: 10px; margin-right: 50px; float: right;">TOTAL: {{sumByOutlet}}</h4>
+				{% endverbatim %}
 			</div>
 
 			<div class="col-sm-6">
@@ -120,17 +122,17 @@
 				allowCopy: true,
 				columns: [
 					{
-						field: "product.product_number",
+						field: "product_number.product_number",
 						title: "ID",
 						width: 1
 					},
 					{
-						field: "product.product_name",
+						field: "product_number.product_name",
 						title: "PRODUCT NAME",
 						width: 2
 					},
 					{
-						field: "product.price",
+						field: "product_number.price",
 						title: "PRICE",
 						width: 1
 					},
@@ -152,13 +154,13 @@
 								if($scope.outletId == "") {
 									return "";
 								}
-								return base_url + "stock/byoutlet/" + $scope.outletId;
+								return "/api/stock/byoutlet/" + $scope.outletId;
 							},
 							dataType: "json"
 						}
 					},
 					sort: {
-						field: "product.product_NUMBER",
+						field: "product_number.product_number",
             			dir: "asc"
 					}
 				},
