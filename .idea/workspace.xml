@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bc0b012f-ac7e-4cca-ace5-b5008749ec9b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/Invoice/Invoice.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/Invoice/Invoice.js" afterDir="false" />
-    </list>
+    <list default="true" id="bc0b012f-ac7e-4cca-ace5-b5008749ec9b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,12 +292,12 @@
       <updated>1554563426883</updated>
       <workItem from="1554563430039" duration="1486000" />
       <workItem from="1554774289922" duration="6525000" />
-      <workItem from="1554857936674" duration="5378000" />
+      <workItem from="1554857936674" duration="6027000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13389000" />
+    <option name="totallyTimeSpent" value="14038000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="-3" width="1853" height="1083" extended-state="6" />
@@ -316,7 +308,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.46331236" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.46331236" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
