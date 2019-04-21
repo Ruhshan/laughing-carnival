@@ -147,6 +147,7 @@
                         <div style="margin-top: 80px;"></div>
 
                         <table class="table borderless">
+                            {% verbatim %}
                             <tr>
                                 <td style="text-align: left; border-top: none;">
                                     <label>VENDOR NO:&nbsp;</label>200921
@@ -182,7 +183,7 @@
                                     <th>AMOUNT</th>
                                 </tr>
                             </thead>
-                            {% verbatim %}
+
                             <tbody>
                                 <tr ng-repeat="product in invoiceProductList">
                                     <td style="text-align: center;">{{ $index + 1 }}</td>

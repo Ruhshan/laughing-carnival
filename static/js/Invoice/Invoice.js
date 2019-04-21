@@ -176,10 +176,10 @@ app.controller("invoiceController", function($scope, $http) {
 
 			$http({
 				method: "GET",
-				url: base_url + 'invoice/getLastInvoiceID/'
+				url: '/api/invoice/getLastId/'
 			}).then(
 				function success(response) {
-					$scope.invoiceNo = response.data + 1;
+					$scope.invoiceNo = response.data.invoice_id + 1;
 				},
 				function error(response) {
 					$.notify("Something went wrong!", "error");
@@ -200,40 +200,42 @@ app.controller("invoiceController", function($scope, $http) {
 
 		angular.forEach($scope.invoiceProductList, function(val, key){
 			var obj = { 
-				productID: val.articleNo,
+				product_number: val.articleNo,
 				quantity: val.quantity
 			}
 			list.push(obj);
 		});
 
 		var dt = { 
-			outletID: $('#outletList').val(),
-			invoiceDate: new Date($('#invoiceDate').val()),
-			invoicedProductEntries: list
+			outlet: $('#outletList').val(),
+			invoice_date: new Date($('#invoiceDate').val()),
+			invoice_product_list: list
 		}
 
-		$http({
-			method: "POST",
-			url: base_url + '/invoice/save',
-			data: dt
-		}).then(
-			function success(response) {
-				if(response.data == true) {
-					setTimeout(function() {
-						window.print();
-						setTimeout(function() {
-							document.location.href = 'http://localhost/personalFiles/apv2/Invoice.html';
-						}, 1000);
-					}, 1000);
-				}
-				else {
-					$.notify("Something went wrong!", "error");
-				}
-			},
-			function error(response) {
-				$.notify("Something went wrong!", "error");
-			}
-		);
+		console.log(JSON.stringify(dt));
+
+		// $http({
+		// 	method: "POST",
+		// 	url: base_url + '/invoice/save',
+		// 	data: dt
+		// }).then(
+		// 	function success(response) {
+		// 		if(response.data == true) {
+		// 			setTimeout(function() {
+		// 				window.print();
+		// 				setTimeout(function() {
+		// 					document.location.href = 'http://localhost/personalFiles/apv2/Invoice.html';
+		// 				}, 1000);
+		// 			}, 1000);
+		// 		}
+		// 		else {
+		// 			$.notify("Something went wrong!", "error");
+		// 		}
+		// 	},
+		// 	function error(response) {
+		// 		$.notify("Something went wrong!", "error");
+		// 	}
+		// );
 	});
 
 	$('#cancelButton').on('click', function() {

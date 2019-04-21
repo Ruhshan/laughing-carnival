@@ -30,9 +30,10 @@
             <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
             <li><a href="{{ menuUrl }}Outlet.html">OUTLET</a></li>
             <li><a href="{{ menuUrl }}Product.html">PRODUCT</a></li>
-            <li><a href="{{ menuUrl }}Invoice.html">INVOICE</a></li>
-            <li><a href="{{ menuUrl }}InvoiceHistory.html">INVOICE RECORDS</a></li>
             {% endverbatim %}
+            <li><a href="{% url 'invoice-view' %}">INVOICE</a></li>
+            <li><a href="#">INVOICE RECORDS</a></li>
+
         </ul>
 
 		<center><h2>STOCK</h2></center>
