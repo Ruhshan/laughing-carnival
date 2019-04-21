@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> INVOICE</title>
+
+    <link rel="stylesheet" href="{% static 'css/kendo.common.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kendo.common-material.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kendo.material.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kendo.mobile.all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kendo.material.mobile.min.css' %}"/>
+    <style>
+
+        .div_box_shadow {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="div_box_shadow">
+    <div id="invoiceToBePrinted" style="margin-top:20px; margin-bottom: 10px; overflow-y: auto;">
+        <div class="t" style="margin-bottom: 100px; overflow-y: auto;">
+            <h2 style="text-align: center;">ADOR PRODUCTS</h2>
+            <h4 style="text-align: center;">Mohammadpur, Dhaka</h4>
+            <h4 style="text-align: center;">Mobile: 01716513233</h4>
+
+            <h3 style="text-align: center; text-decoration: underline; margin-top: 20px;">INVOICE</h3>
+
+            <div style="margin-top: 80px;"></div>
+
+            <table class="table borderless">
+                <tr>
+                    <td style="text-align: left; border-top: none;">
+                        <label>VENDOR NO:&nbsp;</label>200921
+                    </td>
+                    <td style="text-align: left; border-top: none;"></td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: left; border-top: none;">
+                        <label>INVOICE NO:&nbsp;</label>{{ invoice.invoice_id }}
+                    </td>
+                    <td style="text-align: left; border-top: none;"></td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: left; border-top: none;">
+                        <label>OUTLET:&nbsp;</label> {{ invoice.outlet.outlet_name }}
+                    </td>
+                    <td style="text-align: right; border-top: none;">
+                        <label>DATE:&nbsp;</label>{{ invoice.invoice_date.date }}
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered printInvoiceTable" style="margin-top: 10px;">
+                <thead>
+                <tr>
+                    <th>SL#</th>
+                    <th>ARTICLE</th>
+                    <th>ARTICEL DESCRIPTION</th>
+                    <th>QUANTITY</th>
+                    <th>UNIT PRICE</th>
+                    <th>AMOUNT</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for product in products %}
+                <tr>
+                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                    <td style="text-align: center;">{{ product.product_number.product_number }}</td>
+                    <td style="text-align: center;">{{ product.product_number.product_name}}</td>
+                    <td style="text-align: center;">{{ product.quantity }}</td>
+                    <td style="text-align: center;">{{ product.product_number.price }}</td>
+                    <td style="text-align: center;">{{ product.amount }}</td>
+                </tr>
+                {% endfor %}
+
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">TOTAL</td>
+                    <td style="text-align: center;">{{ total_quantity }}</td>
+                    <td></td>
+                    <td style="text-align: center;">{{ total_amount }}</td>
+                </tr>
+                </tbody>
+
+            </table>
+
+            <div style="margin-bottom: 80px;"></div>
+
+            <table class="table borderless">
+                <tr>
+                    <td style="text-align: left; border-top: none;"><label>RECEIVERS SIGNATURE</label></td>
+                    <td style="text-align: right; border-top: none;"><label>SUPPLIERS SIGNATURE</label></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</body>
