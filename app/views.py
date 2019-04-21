@@ -34,5 +34,4 @@ def InvoicePdfView(request,invoice_id):
         response['Content-Disposition'] = 'filename="home_page.pdf"'
 
         return response
-        #return render(request, "app/_invoice_pdf.html",{'invoice':invoice, 'products':products,"total_quantity":total_quantity,"total_amount":total_amount})
 
