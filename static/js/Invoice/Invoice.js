@@ -212,30 +212,27 @@ app.controller("invoiceController", function($scope, $http) {
 			invoice_product_list: list
 		}
 
-		console.log(JSON.stringify(dt));
+		console.log("dt is"+JSON.stringify(dt))
 
-		// $http({
-		// 	method: "POST",
-		// 	url: base_url + '/invoice/save',
-		// 	data: dt
-		// }).then(
-		// 	function success(response) {
-		// 		if(response.data == true) {
-		// 			setTimeout(function() {
-		// 				window.print();
-		// 				setTimeout(function() {
-		// 					document.location.href = 'http://localhost/personalFiles/apv2/Invoice.html';
-		// 				}, 1000);
-		// 			}, 1000);
-		// 		}
-		// 		else {
-		// 			$.notify("Something went wrong!", "error");
-		// 		}
-		// 	},
-		// 	function error(response) {
-		// 		$.notify("Something went wrong!", "error");
-		// 	}
-		// );
+		$http({
+			method: "POST",
+			url: '/api/invoice/',
+			data: dt
+		}).then(
+			function success(response) {
+
+				if(response.data) {
+					window.location.assign("/app/invoice_pdf/"+response.data.invoice_id)
+				}
+				else {
+					$.notify("Something went wrong!", "error");
+				}
+			},
+			function error(response) {
+				console.log(response)
+				$.notify("Something went wrong!", "error");
+			}
+		);
 	});
 
 	$('#cancelButton').on('click', function() {

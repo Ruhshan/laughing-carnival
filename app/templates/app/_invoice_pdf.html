@@ -2,6 +2,7 @@
 <html>
 <head>
     {% load static %}
+    {% load humanize %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -72,9 +73,9 @@
                     <td style="text-align: center;">{{ forloop.counter }}</td>
                     <td style="text-align: center;">{{ product.product_number.product_number }}</td>
                     <td style="text-align: center;">{{ product.product_number.product_name}}</td>
-                    <td style="text-align: center;">{{ product.quantity }}</td>
-                    <td style="text-align: center;">{{ product.product_number.price }}</td>
-                    <td style="text-align: center;">{{ product.amount }}</td>
+                    <td style="text-align: center;">{{ product.quantity|intcomma }}</td>
+                    <td style="text-align: center;">{{ product.product_number.price|intcomma }}</td>
+                    <td style="text-align: center;">{{ product.amount|intcomma }}</td>
                 </tr>
                 {% endfor %}
 
@@ -83,9 +84,9 @@
                     <td></td>
                     <td></td>
                     <td style="text-align: center;">TOTAL</td>
-                    <td style="text-align: center;">{{ total_quantity }}</td>
+                    <td style="text-align: center;">{{ total_quantity|intcomma }}</td>
                     <td></td>
-                    <td style="text-align: center;">{{ total_amount }}</td>
+                    <td style="text-align: center;">{{ total_amount|intcomma }}</td>
                 </tr>
                 </tbody>
 
