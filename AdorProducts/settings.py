@@ -85,14 +85,27 @@ WSGI_APPLICATION = 'AdorProducts.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'OPTIONS': {
+#             'read_default_file': '/home/abir/PycharmProjects/AdorProducts/mysql.cnf',
+#         },
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': '/home/abir/PycharmProjects/AdorProducts/mysql.cnf',
-        },
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'apdb',
+        'USER': 'apdbuser',
+        'PASSWORD': 'padmin1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

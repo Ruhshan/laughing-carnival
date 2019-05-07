@@ -8,34 +8,13 @@
 from django.db import models
 
 
-class Invoice(models.Model):
-    invoice_id = models.BigAutoField(db_column='INVOICE_ID', primary_key=True)  # Field name made lowercase.
-    invoice_date = models.DateTimeField(db_column='INVOICE_DATE', blank=True, null=True)  # Field name made lowercase.
-    outlet = models.ForeignKey('Outlet', models.DO_NOTHING, db_column='OUTLET_ID', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'invoice'
-
-
-class InvoiceProduct(models.Model):
-    id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    invoice = models.ForeignKey(Invoice, models.DO_NOTHING, db_column='INVOICE_ID', blank=True, null=True)  # Field name made lowercase.
-    quantity = models.BigIntegerField(db_column='QUANTITY', blank=True, null=True)  # Field name made lowercase.
-    product_number = models.ForeignKey('Product', models.DO_NOTHING, db_column='PRODUCT_NUMBER', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'invoice_product'
-
-
 class Outlet(models.Model):
     outlet_id = models.BigAutoField(db_column='OUTLET_ID', primary_key=True)  # Field name made lowercase.
     outlet_name = models.CharField(db_column='OUTLET_NAME', max_length=255, blank=True, null=True)  # Field name made lowercase.
     isdeleted = models.TextField(db_column='isDeleted', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'outlet'
 
 
@@ -46,8 +25,29 @@ class Product(models.Model):
     isdeleted = models.TextField(db_column='isDeleted', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'product'
+
+
+class Invoice(models.Model):
+    invoice_id = models.BigAutoField(db_column='INVOICE_ID', primary_key=True)  # Field name made lowercase.
+    invoice_date = models.DateTimeField(db_column='INVOICE_DATE', blank=True, null=True)  # Field name made lowercase.
+    outlet = models.ForeignKey('Outlet', models.DO_NOTHING, db_column='OUTLET_ID', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = True
+        db_table = 'invoice'
+
+
+class InvoiceProduct(models.Model):
+    id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    invoice = models.ForeignKey(Invoice, models.DO_NOTHING, db_column='INVOICE_ID', blank=True, null=True)  # Field name made lowercase.
+    quantity = models.BigIntegerField(db_column='QUANTITY', blank=True, null=True)  # Field name made lowercase.
+    product_number = models.ForeignKey('Product', models.DO_NOTHING, db_column='PRODUCT_NUMBER', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = True
+        db_table = 'invoice_product'
 
 
 class Stock(models.Model):
@@ -57,5 +57,5 @@ class Stock(models.Model):
     product_number = models.ForeignKey(Product, models.DO_NOTHING, db_column='PRODUCT_NUMBER', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'stock'
