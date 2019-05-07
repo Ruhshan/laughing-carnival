@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -94,16 +96,24 @@ WSGI_APPLICATION = 'AdorProducts.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'apdb',
-        'USER': 'apdbuser',
-        'PASSWORD': 'padmin1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+try:
+    SECRET_KEY = config('SECRET_KEY')
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL')
+        )
     }
-}
+except:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'apdb',
+            'USER': 'apdbuser',
+            'PASSWORD': 'padmin1234',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 
 
@@ -153,3 +163,4 @@ STATICFILES_DIRS = [
 ]
 
 SHELL_PLUS = "ipython"
+
