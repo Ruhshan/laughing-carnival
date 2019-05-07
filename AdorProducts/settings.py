@@ -27,7 +27,7 @@ SECRET_KEY = 'pqiszg&_@nmcg=^i@a(tq)7*6u%d7)cbx-uab&b9-d2@^9lz#2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
