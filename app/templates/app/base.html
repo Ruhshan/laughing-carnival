@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+        {% block title %}
+        STOCK
+        {% endblock %}
+    </title>
+
+	<link rel="stylesheet" href="{% static 'css/kendo.common.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.common-material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.mobile.all.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/kendo.material.mobile.min.css' %}" />
+
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/kendo.all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/validator.min.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+
+    {% block script %}
+    {% endblock %}
+
+</head>
+{% block body %}
+
+{% endblock %}
+
+</html>

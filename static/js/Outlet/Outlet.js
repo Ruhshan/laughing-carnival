@@ -1,13 +1,13 @@
 var app = angular.module("outletApp", []);
 		app.controller("outletController", function($scope, $http) {
 			$scope.Outlet = {
-				outlet_ID: "0",
-				outlet_NAME: ""
+				outlet_id: "0",
+				outlet_name: ""
 			};
 
 			emptyOutlet = {
-				outlet_ID: "",
-				outlet_NAME: ""
+				outlet_id: "",
+				outlet_name: ""
 			};
 
 			$scope.menuUrl = view_url;
@@ -18,11 +18,11 @@ var app = angular.module("outletApp", []);
 				allowCopy: true,
 				columns: [
 					{
-						field: "outlet_ID",
+						field: "outlet_id",
 						title: "OUTLET ID"
 					},
 					{
-						field: "outlet_NAME",
+						field: "outlet_name",
 						title: "OUTLET NAME"
 					}
 				],
@@ -39,17 +39,21 @@ var app = angular.module("outletApp", []);
 				dataSource: {
 					transport: {
 						read: {
-							url: base_url + 'outlet/',
+							url:  '/api/outlet/',
 							dataType: "json"
 						}
 					},
 					pageSize: 10
 				},
 				change: function(e) {
+
 					tempOutlet = {};
+
+
 					angular.copy(this.dataItem(this.select()), tempOutlet);
 
-					if(tempOutlet != null && tempOutlet.outlet_ID != undefined) {
+
+					if(tempOutlet != null && tempOutlet.outlet_id != undefined) {
 						$scope.$apply(function() {
 							angular.copy(tempOutlet, $scope.Outlet);
 						});
@@ -76,9 +80,12 @@ var app = angular.module("outletApp", []);
 			$scope.SaveCommand = function() {
 				var validator = $("#outletForm").kendoValidator().data("kendoValidator");
 				if(validator.validate()) {
+
+					console.log($scope.Outlet)
+
 					$http({
 						method: "POST",
-						url: base_url + 'outlet/save',
+						url: '/api/outlet/',
 						data: $scope.Outlet
 					}).then(function success(response) {
 						$.notify("Save Successful", "success");
@@ -101,7 +108,7 @@ var app = angular.module("outletApp", []);
 			$scope.deleteOutlet = function() {
 				$http({
 					method: "DELETE",
-					url: base_url + "outlet/delete/" + $scope.Outlet.outlet_ID
+					url:"/api/outlet/" + $scope.Outlet.outlet_id
 				}).then(function success(response) {
 					$.notify("Delete Successful", "info");
 					refreshGrid();

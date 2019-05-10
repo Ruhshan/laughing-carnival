@@ -1,0 +1,80 @@
+{% extends "app/base.html" %}
+    {% load static %}
+    {% block title %}
+        Outlet
+    {% endblock %}
+    {% block script %}
+            <script src="{% static 'js/Outlet/Outlet.js' %}"></script>
+    {% endblock %}
+
+{% block body %}
+    <body>
+	<div class="container" ng-app="outletApp" ng-controller="outletController">
+        <ul id="menu">
+            <li><a href="{% url 'stock-view' %}">STOCK</a></li>
+            <li><a href="{{ menuUrl }}Sales.html">SALES</a></li>
+            <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
+            <li><a href="{% url 'outlet-view' %}">OUTLET</a></li>
+            <li><a href="{% url 'product-view' %}">PRODUCT</a></li>
+            <li><a href="{% url 'invoice-view' %}">INVOICE</a></li>
+            <li><a href="#">INVOICE RECORDS</a></li>
+        </ul>
+
+		<center><h2>OUTLETS</h2></center>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div id="grid"></div>
+			</div>
+
+			<div class="col-sm-6">
+				<button type="button" id="newButton" ng-click="NewCommand()" class="btn btn-default" style="width: 100px;"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;New</button>
+                <button type="button" id="deleteButton" ng-click="DeleteCommand()" class="btn btn-default" style="width: 100px;"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete</button>
+
+                <div style="margin-top: 10px;" id="outletForm">
+                	<div class="form-group">
+						<label for="outlet_id">OUTLET ID:</label>
+	              		<input type="text" class="form-control" disabled ng-model="Outlet.outlet_id" id="outlet_id" name="outlet_id" placeholder="0">
+	              	</div>
+
+	              	<div class="form-group">
+	                  	<label for="outlet_name">OUTLET NAME:</label>
+	                  	<input type="text" class="form-control" required validationMessage="Outlet Name is required" ng-model="Outlet.outlet_name" id="outlet_name" name="outlet_name" placeholder="Enter Outlet Name"/>
+	              	</div>
+
+	              	<button type="button" id="submitButton" ng-click="SaveCommand()" style="width: 100px;" class="btn btn-default"><span class="glyphicon glyphicon-floppy-save"></span>&nbsp;&nbsp;Save</button>
+                </div>
+
+			</div>
+		</div>
+
+		<div id="deleteConfirmModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header" style="background-color:#e2db09;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Confirm</h4>
+					</div>
+
+					<div class="modal-body">
+						<p>Are you sure? the record will be lost!!</p>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" ng-click="deleteOutlet()" id="deleteConfirm" data-dismiss="modal">Yes</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<style type="text/css">
+		.k-grid-header .k-header
+		{
+			background-color: #0d47a1;
+			border: 0 !important;
+		}
+	</style>
+</body>
+{% endblock %}

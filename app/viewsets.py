@@ -7,8 +7,14 @@ from .serializers import OutletSerializer, ProductSerializer, StockSerializer, I
 
 
 class OutletViewSet(ModelViewSet):
-    queryset = Outlet.objects.all()
+    queryset = Outlet.objects.filter(isdeleted=False)
     serializer_class = OutletSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.isdeleted = True
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProductViewSet(ModelViewSet):

@@ -11,7 +11,7 @@ from django.db import models
 class Outlet(models.Model):
     outlet_id = models.BigAutoField(db_column='OUTLET_ID', primary_key=True)  # Field name made lowercase.
     outlet_name = models.CharField(db_column='OUTLET_NAME', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    isdeleted = models.TextField(db_column='isDeleted', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+    isdeleted = models.TextField(db_column='isDeleted', blank=True, null=True, default=False)  # Field name made lowercase. This field type is a guess.
 
     class Meta:
         managed = True
