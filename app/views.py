@@ -31,6 +31,7 @@ def InvoicePdfView(request,invoice_id):
     if request.method=="GET":
         invoice = Invoice.objects.get(invoice_id=invoice_id)
         products = invoice.invoiceproduct_set.annotate(amount=ExpressionWrapper(F("quantity")*F("product_number__price"),output_field=FloatField())).all()
+        products = products.order_by("product_number")
         total_quantity = products.aggregate(Sum('quantity'))["quantity__sum"]
         total_amount = products.aggregate(Sum('amount'))["amount__sum"]
 
