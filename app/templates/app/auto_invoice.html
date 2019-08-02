@@ -1,30 +1,132 @@
 {% extends "app/base.html" %}
-    {% load static %}
-    {% block title %}
-        Auto Invoice
-    {% endblock %}
-    {% block script %}
-    {% endblock %}
+{% load static %}
+{% block title %}
+    Auto Invoice
+{% endblock %}
+{% block script %}
+    <script src="http://mozilla.github.io/pdf.js/build/pdf.js"></script>
+{% endblock %}
 
 {% block body %}
     <body>
-	<div class="container" ng-app="autoInvoiceApp" ng-controller="autoInvoiceController">
+    <div class="container" ng-app="autoInvoiceApp" ng-controller="autoInvoiceController">
         {% include "app/menu.html" %}
-		<center><h2>Auto Invoice</h2></center>
+        <center><h2>Auto Invoice</h2></center>
+
+        <div style="margin-top: 10px; margin-bottom: 10px;">
+
+            <div>
+
+                <label for="invoiceDate">INVOICE DATE:&nbsp;</label>
+                <input id="invoiceDate" name="invoiceDate" onkeydown="return false;">
+
+            </div>
+            <br>
+
+            <div>
+                <label for="outletList">OUTLET LIST:&nbsp;</label>
+                <div id="outletList" name="outletList" style="width: 220px;"></div>
+            </div>
+            <div>
+                <label for="po">SELECT FILE:&nbsp;</label>
+                <input id="po" name="po" style="width: 220px;" type="file">
+            </div>
+
+
+        </div>
     </div>
 
     <script type="text/javascript">
         var app = angular.module("autoInvoiceApp", []);
-        app.controller("autoInvoiceController", function($scope, $http) {
-            			$('#menu').kendoMenu();
+        app.controller("autoInvoiceController", function ($scope, $http) {
+            $('#menu').kendoMenu();
+            $('#invoiceDate').kendoDatePicker({
+                format: 'dd MMMM, yyyy'
+            });
+
+            var todayDate = kendo.toString(kendo.parseDate(new Date()), 'dd MMMM, yyyy');
+            $("#invoiceDate").data('kendoDatePicker').value(todayDate);
+
+            $('#invoiceDate').bind('click', function () {
+                if (!isDatePickerOpen)
+                    $(this).data('kendoDatePicker').open();
+                else $(this).data('kendoDatePicker').close();
+
+                isDatePickerOpen = !isDatePickerOpen;
+            });
+            $("#po").bind("change", function (event) {
+                    var file = event.target.files[0];
+                    readFile(file);
+                }
+            )
+
+            function readFile(file) {
+                var fileReader = new FileReader();
+                fileReader.onload = function () {
+                    //Step 4:turn array buffer into typed array
+                    var typedarray = new Uint8Array(this.result);
+                    parsePdf(typedarray);
+
+
+                };
+                fileReader.readAsArrayBuffer(file);
+            }
+
+            function parsePdf(typedarray) {
+                var loadingTask = pdfjsLib.getDocument(typedarray);
+
+                loadingTask.promise.then(function (pdf) {
+
+                    pdf.getPage(1).then(function (page) {
+
+
+                        page.getTextContent({
+                            normalizeWhitespace: true,
+                            disableCombineTextItems: true
+                        }).then(function (content) {
+
+                            var text = ""
+                            content.items.forEach(element => {
+
+                                text += element.str + " "
+
+                            });
+
+                            products = text.match(/33\d{5}/g);
+                            quantities = [];
+                            text.match(/\s[0-9]+(\.[0-9][0-9])?\sEA/g).forEach(e => {
+                                sanitized = e.replace("EA", "").trim();
+                                quantities.push(sanitized);
+                            });
+                            console.log(products);
+                            console.log(quantities);
+
+                        });
+                    });
+
+                });
+            }
+
+            $("#outletList").kendoDropDownList({
+                dataTextField: "outlet_name",
+                dataValueField: "outlet_id",
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: '/api/outlet/',
+                            dataType: 'json'
+                        }
+                    }
+                },
+                optionLabel: "SELECT OUTLET"
+            });
         });
     </script>
 
     <style type="text/css">
-		.k-grid-header .k-header
-		{
-			background-color: #0d47a1;
-			border: 0 !important;
-		}
-	</style>
+        .k-grid-header .k-header {
+            background-color: #0d47a1;
+            border: 0 !important;
+        }
+    </style>
 {% endblock body %}
