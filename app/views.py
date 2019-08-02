@@ -26,6 +26,8 @@ class ProductView(TemplateView):
 class OutletView(TemplateView):
     template_name = "app/outlet.html"
 
+class AutoInvoiceView(TemplateView):
+    template_name = "app/auto_invoice.html"
 
 def InvoicePdfView(request,invoice_id):
     if request.method=="GET":

@@ -12,15 +12,7 @@
 {% block body %}
     <body>
 	<div class="container" ng-app="productApp" ng-controller="productController">
-		<ul id="menu">
-            <li><a href="{% url 'stock-view' %}">STOCK</a></li>
-            <li><a href="{{ menuUrl }}Sales.html">SALES</a></li>
-            <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
-            <li><a href="{% url 'outlet-view' %}">OUTLET</a></li>
-            <li><a href="{% url 'product-view' %}">PRODUCT</a></li>
-            <li><a href="{% url 'invoice-view' %}">INVOICE</a></li>
-            <li><a href="#">INVOICE RECORDS</a></li>
-        </ul>
+		{% include "app/menu.html" %}
 
 		<center><h2>PRODUCTS</h2></center>
 		<div class="row">

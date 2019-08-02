@@ -1,0 +1,30 @@
+{% extends "app/base.html" %}
+    {% load static %}
+    {% block title %}
+        Auto Invoice
+    {% endblock %}
+    {% block script %}
+    {% endblock %}
+
+{% block body %}
+    <body>
+	<div class="container" ng-app="autoInvoiceApp" ng-controller="autoInvoiceController">
+        {% include "app/menu.html" %}
+		<center><h2>Auto Invoice</h2></center>
+    </div>
+
+    <script type="text/javascript">
+        var app = angular.module("autoInvoiceApp", []);
+        app.controller("autoInvoiceController", function($scope, $http) {
+            			$('#menu').kendoMenu();
+        });
+    </script>
+
+    <style type="text/css">
+		.k-grid-header .k-header
+		{
+			background-color: #0d47a1;
+			border: 0 !important;
+		}
+	</style>
+{% endblock body %}

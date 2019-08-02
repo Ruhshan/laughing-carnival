@@ -50,17 +50,7 @@
 </head>
 <body id="body">
 	<div id="mainDiv" class="container" ng-app="invoiceApp" ng-controller="invoiceController">
-        <ul id="menu">
-            {% verbatim %}
-            <li><a href="{{ menuUrl }}">STOCK</a></li>
-            <li><a href="{{ menuUrl }}Sales.html">SALES</a></li>
-            <li><a href="{{ menuUrl }}Supply.html">SUPPLY</a></li>
-            <li><a href="{{ menuUrl }}Outlet.html">OUTLET</a></li>
-            <li><a href="{{ menuUrl }}Product.html">PRODUCT</a></li>
-            <li><a href="{{ menuUrl }}Invoice.html">INVOICE</a></li>
-            <li><a href="{{ menuUrl }}InvoiceHistory.html">INVOICE RECORDS</a></li>
-            {% endverbatim %}
-        </ul>
+        {% include "app/menu.html" %}
 
         <div id="invoiceMakerDiv">
             <h1 style="text-align: center;">CREATE INVOICE</h1>
