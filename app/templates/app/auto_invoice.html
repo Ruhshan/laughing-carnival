@@ -14,23 +14,39 @@
         <center><h2>Auto Invoice</h2></center>
 
         <div style="margin-top: 10px; margin-bottom: 10px;">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="invoiceDate">INVOICE DATE:&nbsp;</label>
+                    <div class="col-sm-3">
+                        <input id="invoiceDate" name="invoiceDate" onkeydown="return false;" class="form-control">
+                    </div>
+                </div>
 
-            <div>
 
-                <label for="invoiceDate">INVOICE DATE:&nbsp;</label>
-                <input id="invoiceDate" name="invoiceDate" onkeydown="return false;">
+                <div class="form-group  ">
+                    <label for="outletList" class="control-label col-sm-2">OUTLET LIST:&nbsp;</label>
+                    <div class="col-sm-3">
+                        <div id="outletList" class="alert-danger" name="outletList" style="width: 220px;"></div>
+                    </div>
+                </div>
 
+
+                <div class="form-group">
+                    <label for="page" class="control-label col-sm-2">SELECT PAGE:</label>
+                    <div class="col-sm-3">
+                        <input id="page" type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="po" class="control-label col-sm-2">SELECT PO:&nbsp;</label>
+                    <div class="col-sm-3">
+                        <input id="po" name="po" style="width: 220px;" type="file">
+                    </div>
+                </div>
             </div>
-            <br>
 
-            <div>
-                <label for="outletList">OUTLET LIST:&nbsp;</label>
-                <div id="outletList" name="outletList" style="width: 220px;"></div>
-            </div>
-            <div>
-                <label for="po">SELECT FILE:&nbsp;</label>
-                <input id="po" name="po" style="width: 220px;" type="file">
-            </div>
+
+            <button id="save">Save</button>
 
 
         </div>
@@ -39,6 +55,8 @@
     <script type="text/javascript">
         var app = angular.module("autoInvoiceApp", []);
         app.controller("autoInvoiceController", function ($scope, $http) {
+            var product_list = [];
+            var file = null;
             $('#menu').kendoMenu();
             $('#invoiceDate').kendoDatePicker({
                 format: 'dd MMMM, yyyy'
@@ -55,10 +73,31 @@
                 isDatePickerOpen = !isDatePickerOpen;
             });
             $("#po").bind("change", function (event) {
-                    var file = event.target.files[0];
+                    file = event.target.files[0];
+                    //readFile(file);
+                }
+            );
+
+            $("#save").bind("click", function () {
+
+                valid = true;
+                if ($('#outletList').val() == "") {
+                    valid = false;
+                    alert("Select an outlet from outlet list");
+                } else if ($("#page").val() == "") {
+                    valid = false;
+                    alert("Enter a valid page number")
+                } else if (file === null) {
+                    valid = false;
+                    alert("Select a valid file");
+                }
+
+                if (valid) {
                     readFile(file);
                 }
-            )
+
+
+            });
 
             function readFile(file) {
                 var fileReader = new FileReader();
@@ -66,6 +105,7 @@
                     //Step 4:turn array buffer into typed array
                     var typedarray = new Uint8Array(this.result);
                     parsePdf(typedarray);
+                    console.log("parsing complete");
 
 
                 };
@@ -74,10 +114,16 @@
 
             function parsePdf(typedarray) {
                 var loadingTask = pdfjsLib.getDocument(typedarray);
+                product_list = [];
 
                 loadingTask.promise.then(function (pdf) {
 
-                    pdf.getPage(1).then(function (page) {
+
+                    if (parseInt($("#page").val()) > pdf._pdfInfo.numPages) {
+                        alert("Select page between 1 to " + pdf._pdfInfo.numPages);
+                    }
+
+                    pdf.getPage(parseInt($("#page").val())).then(function (page) {
 
 
                         page.getTextContent({
@@ -98,13 +144,51 @@
                                 sanitized = e.replace("EA", "").trim();
                                 quantities.push(sanitized);
                             });
-                            console.log(products);
-                            console.log(quantities);
+
+                            for (i = 0; i < products.length; i++) {
+                                product_list.push(
+                                    {
+                                        product_number: products[i],
+                                        quantity: quantities[i]
+                                    }
+                                );
+                            }
+                            console.log("parsing done!");
+                            callApi();
 
                         });
                     });
 
                 });
+            }
+
+            function callApi() {
+                var dt = {
+                    outlet: $('#outletList').val(),
+                    invoice_date: new Date($('#invoiceDate').val()),
+                    invoice_product_list: product_list
+                }
+
+                console.log(dt);
+
+                $http({
+                    method: "POST",
+                    url: '/api/invoice/',
+                    data: dt
+                }).then(
+                    function success(response) {
+
+                        if (response.data) {
+                            window.location.assign("/app/invoice_pdf/" + response.data.invoice_id)
+                        } else {
+                            $.notify("Something went wrong!", "error");
+                        }
+                    },
+                    function error(response) {
+                        console.log(response)
+                        $.notify("Something went wrong!", "error");
+                    }
+                );
             }
 
             $("#outletList").kendoDropDownList({
