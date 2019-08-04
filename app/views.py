@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from weasyprint import HTML, CSS
 from django.shortcuts import render
 from django.db.models import F, ExpressionWrapper, FloatField, Sum
@@ -10,25 +12,27 @@ from .models import Invoice
 
 from django.views.generic import TemplateView
 
-
+@method_decorator(login_required, name='dispatch')
 class PageView(TemplateView):
     template_name = "app/index.html"
 
-
+@method_decorator(login_required, name='dispatch')
 class InvoiceView(TemplateView):
     template_name = "app/Invoice.html"
 
-
+@method_decorator(login_required, name='dispatch')
 class ProductView(TemplateView):
     template_name = "app/product.html"
 
-
+@method_decorator(login_required, name='dispatch')
 class OutletView(TemplateView):
     template_name = "app/outlet.html"
 
+@method_decorator(login_required, name='dispatch')
 class AutoInvoiceView(TemplateView):
     template_name = "app/auto_invoice.html"
 
+@login_required
 def InvoicePdfView(request,invoice_id):
     if request.method=="GET":
         invoice = Invoice.objects.get(invoice_id=invoice_id)

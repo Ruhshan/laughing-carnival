@@ -164,3 +164,5 @@ STATICFILES_DIRS = [
 
 SHELL_PLUS = "ipython"
 
+LOGIN_URL="/login/"
+LOGIN_REDIRECT_URL = '/app'

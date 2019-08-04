@@ -18,8 +18,14 @@ from django.urls import path
 from django.urls import include
 from app.urls import router
 
+from django.contrib.auth import views as auth_views
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('app/', include('app.urls')),
-    path('api/', include((router.urls,'app')))
+    path('api/', include((router.urls,'app'))),
+    path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/login'),name='logout'),
 ]

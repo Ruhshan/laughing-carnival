@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load i18n %}
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 col-lg-offset-4 col-lg-4">
+    <br/>
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% trans "Your username and password didn't match. Please try again." %}
+        </div>
+    {% endif %}
+    {% if next %}
+        <div class="alert alert-warning" role="alert">
+            {% trans "Please Login!" %}
+        </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1> {% trans "Welcome!" %}</h1>
+        </div>
+        <div class="panel-body">
+            <form method="post" action="{% url 'login' %}">
+
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.html_name == 'username' %}
+                        <div class="form-group">
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-user" style="width: auto"></i>
+                            </span>
+                                <input id="id_username" type="text" class="form-control" name="username" autofocus
+                                       required id="id_username" maxlength="254"
+                                       placeholder="{% trans 'User Name' %}"/>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.html_name == 'password' %}
+                        <div class="form-group">
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-lock" style="width: auto"></i>
+                            </span>
+                                <input id="id_password" type="password" class="form-control" name="password"
+                                       placeholder="{% trans 'Password' %}" required/>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <button id="btnLogin" type="submit" class="btn btn-default" style="width: 100%">
+                    {% trans 'Login' %}
+                    <i class="glyphicon glyphicon-log-in"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

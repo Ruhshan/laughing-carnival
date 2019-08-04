@@ -169,12 +169,13 @@
                     invoice_product_list: product_list
                 }
 
-                console.log(dt);
+                var $crf_token = getCookie("csrftoken");
 
                 $http({
                     method: "POST",
                     url: '/api/invoice/',
-                    data: dt
+                    data: dt,
+                    headers: {"X-CSRFToken": $crf_token},
                 }).then(
                     function success(response) {
 
@@ -205,6 +206,22 @@
                 optionLabel: "SELECT OUTLET"
             });
         });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     </script>
 
     <style type="text/css">
