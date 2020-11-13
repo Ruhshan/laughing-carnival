@@ -11,7 +11,7 @@ djangorestframework==3.9.2
 djangorestframework-stubs==0.4.2
 html5lib==1.0.1
 #mysqlclient==1.4.2.post1
-Pillow==6.2.0
+Pillow==7.1.0
 pycparser==2.19
 Pyphen==0.9.5
 pytz==2018.9
