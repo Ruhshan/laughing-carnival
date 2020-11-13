@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PageView, InvoiceView, InvoicePdfView, ProductView, OutletView, AutoInvoiceView
+from .views import PageView, InvoiceView, InvoicePdfView, ProductView, OutletView, AutoInvoiceView, InvoicePdfSetView
 from rest_framework import routers
 from .viewsets import OutletViewSet, ProductViewSet, StockViewSet, InvoiceViewSet
 
@@ -9,7 +9,8 @@ urlpatterns = [
     path('auto-invoice',AutoInvoiceView.as_view(), name='auto-invoice-view'),
     path('product', ProductView.as_view(), name='product-view'),
     path('outlet', OutletView.as_view(), name='outlet-view'),
-    path('invoice_pdf/<int:invoice_id>',InvoicePdfView)
+    path('invoice_pdf/<int:invoice_id>',InvoicePdfView),
+    path('invoice_pdf_set', InvoicePdfSetView)
 
 ]
 router = routers.SimpleRouter()
